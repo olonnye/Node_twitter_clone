@@ -2,5 +2,8 @@ extends layout
 
 block content
   h1 Lead
-  p Welcome to #{lead.email}
+  p 
+    span #{lead.email}
+    |
+    a(href='/lead/' + lead.id + '/edit') Edit
   
