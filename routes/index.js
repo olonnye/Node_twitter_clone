@@ -22,5 +22,7 @@ router.post("/lead/:lead_id/delete-json", landing.delete_lead_json);
 /*GET Login Page */
 router.get("/login", user.show_login);
 router.get("/signup", user.show_signup);
+router.post("/login", user.login);
+router.post("/signup", user.signup);
 
 module.exports = router;
