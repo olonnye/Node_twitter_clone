@@ -1,7 +1,7 @@
 const models = require("../models");
 // renders landing page
 exports.get_landing = function(req, res, next) {
-  res.render("landing", { title: "Express" });
+  res.render("landing", { title: "Express", user: req.user });
 };
 
 // submit inputted email into DB
