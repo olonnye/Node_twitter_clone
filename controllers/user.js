@@ -27,19 +27,41 @@ exports.signup = function(req, res, next) {
   let errors = {};
   return validateUser(errors, req).then(errors => {
     if (!isEmpty(errors)) {
+      // if errors rerenders signup page with erros
       rerender_signup(errors, req, res, next);
     } else {
-      const newUser = models.user.build({
-        email: req.body.email,
-        password: generateHash(req.body.password)
-      });
-      return newUser.save().then(result => {
-        passport.authenticate("local", {
-          successRedirect: "/",
-          failureRedirect: "/signup",
-          failureFlash: true
-        })(req, res, next);
-      });
+      return models.user
+        .findOne({
+          // checks for admin key in current users
+          where: {
+            is_Admin: true
+          }
+        })
+        .then(user => {
+          let newUser;
+          if (user !== null) {
+            // checks for user in system if none then adds to database
+            newUser = models.user.build({
+              email: req.body.email,
+              password: generateHash(req.body.password)
+            });
+          } else {
+            // if no current admin then makes new user with admin key and value true
+            newUser = models.user.build({
+              email: req.body.email,
+              password: generateHash(req.body.password),
+              is_Admin: true
+            });
+          }
+          return newUser.save().then(result => {
+            // saves user and returns to home page
+            passport.authenticate("local", {
+              successRedirect: "/",
+              failureRedirect: "/signup",
+              failureFlash: true
+            })(req, res, next);
+          });
+        });
     }
   });
 };

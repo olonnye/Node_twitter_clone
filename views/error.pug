@@ -1,13 +1,16 @@
 doctype html
 html(lang="en")
   include common/header.pug
-  +head("starter MVP")
+  +head("Error")
   body
     header
       include common/navbar.pug
       +navbar()
+    div.container
+      div.row
+        div.col-md-12
+          h1= message
+          h2.text-danger= error.status
+          pre.text-danger #{error.stack}
 
-block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  
