@@ -5,6 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 let passport = require("passport");
 let session = require("express-session");
+var flash = require("connect-flash");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -24,11 +25,19 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // NEED TO BE IN THIS ORDER
-app.use(session({ secret: "our new secret" }));
+app.use(
+  session({
+    secret: "our_new_secret",
+    name: "new_secret",
+    resave: true,
+    saveUninitialized: true
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 // -END
 
+app.use(flash());
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
